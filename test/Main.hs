@@ -1,6 +1,7 @@
 module Main (main) where
 
 import MyLib
+import ReadInput
 import Test.Tasty
 import Test.Tasty.HUnit
 
@@ -18,4 +19,8 @@ tests :: TestTree
 tests = testGroup "MyLib Tests" [faultyTest, correctTest]
 
 main :: IO ()
-main = defaultMain tests
+main = do
+  contents <- readFileAsLines "input/2023/day1_1.txt"
+  let numbers = extractNumbers contents
+  let solution = sum numbers
+  print solution
