@@ -1,4 +1,4 @@
-module MyLib (someFunc, extractNumbers) where
+module MyLib (someFunc, extractNumbers, calcCalibrationValue) where
 
 import Day1
 

@@ -20,7 +20,6 @@ tests = testGroup "MyLib Tests" [faultyTest, correctTest]
 
 main :: IO ()
 main = do
-  contents <- readFileAsLines "input/2023/day1_1.txt"
-  let numbers = extractNumbers contents
-  let solution = sum numbers
-  print solution
+  numbersList <- readFileAsLines "input/2023/day1.txt"
+  let solutions = calcCalibrationValue numbersList
+  print solutions
