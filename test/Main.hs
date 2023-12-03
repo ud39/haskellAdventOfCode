@@ -20,6 +20,9 @@ tests = testGroup "MyLib Tests" [faultyTest, correctTest]
 
 main :: IO ()
 main = do
-  numbersList <- readFileAsLines "input/2023/day1.txt"
-  let solutions = calcCalibrationValue numbersList
-  print solutions
+  let initialCubesString = "12 red cubes, 13 green cubes, and 14 blue cubes"
+  let initialCubes = extractInitialCubes initialCubesString
+  games <- readFileAsLines "input/2023/day2.txt"
+  let parsedGames = map parseGame games
+  print parsedGames
+  print initialCubes

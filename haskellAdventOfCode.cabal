@@ -62,7 +62,7 @@ library
     exposed-modules:  MyLib ReadInput
 
     -- Modules included in this library but not exported.
-    other-modules: Day1
+    other-modules: Day1 Day2
 
     -- LANGUAGE extensions used by modules in this package.
     -- other-extensions:
@@ -70,6 +70,7 @@ library
     -- Other library packages from which modules are imported.
     build-depends:    base ^>=4.17.2.0
                     , containers
+                    , split
 
     -- Directories containing source files.
     hs-source-dirs:   lib
