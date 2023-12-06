@@ -35,6 +35,9 @@ main = do
       checkedGames = map (map (compareCounts availableCounts)) playedGames
       allValid = map (all and) checkedGames
       numberOfValidGames = countValidGames allValid gamesIds
+      minCubesNeed = sum (map (product . calcMinCubesNeed availableCounts) playedGames)
+
   
 
   print numberOfValidGames
+  print minCubesNeed
