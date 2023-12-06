@@ -1,8 +1,8 @@
-module MyLib (someFunc, extractNumbers, calcCalibrationValue, parseGame, extractInitialCubes) where
+module MyLib (someFunc, extractNumbers, calcCalibrationValue, parseGame, getCount, countValidGames, compareCounts, getIndexes) where
 
 import Day1
-import Day2 (extractInitialCubes, parseGame)
-import System.Environment (executablePath)
+import Day2 (countValidGames, parseGame, getCount, compareCounts, getIndexes)
+
 
 someFunc :: String
 someFunc = "someFunc"

@@ -1,7 +1,6 @@
-module Day2 (parseGame, extractInitialCubes) where
+module Day2 (parseGame, getCount, getIndexes, compareCounts, countValidGames) where
 
-import Data.Char (isDigit)
-import Data.List (dropWhileEnd)
+import Data.List (dropWhileEnd, isInfixOf)
 import Data.List.Split (splitOn)
 
 parseGame :: String -> [[String]]
@@ -16,11 +15,26 @@ parseGame input =
       [gamePart, _] -> gamePart
       _ -> ""
 
-extractInitialCubes :: String -> [String]
-extractInitialCubes initialCubes = map (dropWhile (not . isDigit) . trimBoth) $ takeWhile (/= 'c') <$> splitOn ", " initialCubes
-
 trimBoth :: String -> String
 trimBoth = dropWhileEnd (== ' ') . dropWhile (== ' ')
 
--- validGames :: [String] -> Int
--- validGames game = do
+-- Function to get the count of a specific color from available counts
+getCount :: String -> [String] -> Int
+getCount color counts =
+  case filter (\s -> color `isInfixOf` s) counts of
+    [] -> 0
+    (x:_) -> read . head . words $ x
+
+getIndexes :: [[[String]]] -> [Int]
+getIndexes xs = map (+1) [0..(length xs - 1)]
+
+compareCounts :: [String] -> [String] -> [Bool]
+compareCounts availableCounts play =
+  [ getCount color availableCounts >= getCount color play | color <- colors ]
+  where
+    colors = map (dropWhile (== ' ') . dropWhile (/= ' ')) availableCounts
+
+
+countValidGames :: [Bool] -> [Int] -> Int
+countValidGames validGames indexes = sum $ zipWith (\valid idx -> if valid then idx else 0) validGames indexes
+
