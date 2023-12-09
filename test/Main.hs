@@ -25,7 +25,14 @@ tests = testGroup "MyLib Tests" [faultyTest, correctTest]
 -}
 
 
-newtype Coordinates = Coordinates (String, (Int, Int)) deriving Show
+newtype Coordinates = Coordinates { getCoordinates :: (String, (Int, Int)) } deriving Show
+
+getCoord :: Coordinates -> (Int, Int)
+getCoord = snd . getCoordinates
+
+getNumber :: Coordinates -> Int
+getNumber = read . fst . getCoordinates
+
 
 extractNumberCoordinates :: String -> [Coordinates]
 extractNumberCoordinates row =
@@ -46,7 +53,6 @@ extractNumberCoordinates row =
   in processRow row 0
 
 
-
 extractSymbolsCoordinates :: String -> [(Int, Int)]
 extractSymbolsCoordinates row =
   let go :: String -> Int -> Int -> [(Int, Int)] -> [(Int, Int)]
@@ -64,12 +70,50 @@ extractSymbolsCoordinates row =
   in processRow row 0
 
 
+checkIfNumberAdjacent :: Int -> Coordinates -> [[(Int, Int)]] -> Int
+checkIfNumberAdjacent index currentNumber symbol
+    | index == 0 && check (getCoord currentNumber) symbolsElementAtIndexPlusOne = getNumber currentNumber
+    | index == length symbol - 1 && check (getCoord currentNumber) symbolsElementAtIndexMinusOne = getNumber currentNumber
+    | index > 0 && index < length symbol - 1
+             && (check (getCoord currentNumber) symbolsElementAtIndexMinusOne
+             ||  check (getCoord currentNumber) symbolsElementAtIndex
+             ||  check (getCoord currentNumber) symbolsElementAtIndexPlusOne
+             )
+             = getNumber currentNumber
+    | otherwise = 0
+    where 
+        symbolsElementAtIndexMinusOne = symbol !! (index - 1) 
+        symbolsElementAtIndexPlusOne = symbol !! (index + 1) 
+        symbolsElementAtIndex = symbol !! index
+
+        check :: (Int, Int) -> [(Int, Int)] -> Bool
+        check numberCoordinates symbolCoordinates =
+            let (numberX, numberY) = numberCoordinates
+            in any (\(symX, symY) -> abs (numberY - symY) <= 1 || abs (numberX - symY) <= 1) symbolCoordinates
+
+
+transformCoordinates :: Int -> [(Int, Int)] -> [(Int, Int)]
+transformCoordinates newRowIdx coords =
+    map (\(oldRowIdx, colIdx) -> (newRowIdx, colIdx)) coords
+
+
+transformListOfCoordinates :: [[(Int, Int)]] -> [[(Int, Int)]]
+transformListOfCoordinates listOfCoords =
+    zipWith transformCoordinates [0..] listOfCoords
+
 main :: IO ()
 main = do
   schematic <- readFileAsLines "./input/2023/day3.txt"
   let exampleInput = ["467..114..","...*......","..35..633.","......#...","617*......",".....+.58.","..592.....","......755.","...$.*....",".664.598.."]
-      extractedNumbers = map extractNumberCoordinates exampleInput
-      extractedSymbols = map extractSymbolsCoordinates exampleInput
+      extractedNumbers = map extractNumberCoordinates schematic
+      extractedSymbols = map extractSymbolsCoordinates schematic
+      extractedSymbolsCoordinates = transformListOfCoordinates extractedSymbols
+      validNumbers = [checkIfNumberAdjacent i coord extractedSymbolsCoordinates | (i, coordinates) <- zip [0..] extractedNumbers, coord <- coordinates]
+      sumOfValidNumbers = sum validNumbers
+
+
+  print validNumbers
+  print sumOfValidNumbers
   print extractedNumbers
   print extractedSymbols
-
+  print extractedSymbolsCoordinates
