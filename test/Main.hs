@@ -24,20 +24,28 @@ tests = testGroup "MyLib Tests" [faultyTest, correctTest]
 -}
 
 
+extractWinningNumbers :: String -> [Int]
+extractWinningNumbers scratchCard = 
+    map read $ words winningNumbers
+    where
+        winningNumbers = drop 1 $ dropWhile (/= '|') scratchCard
+
+extractMyNumbers :: String -> [Int]
+extractMyNumbers scratchCard = 
+    map read $ words myNumbers
+    where 
+        myNumbers = drop 1 $ takeWhile (/= '|') $ dropWhile (/= ':') scratchCard
+        
+
+
 main :: IO ()
 main = do
-  games <- readFileAsLines  "./input/2023/day2.txt"
-  let parsedGames = map parseGame games
-      playedGames = map tail parsedGames
-      gamesIds = getIndexes parsedGames
-      availableCounts = ["12 red","13 green","14 blue"]
-
-      checkedGames = map (map (compareCounts availableCounts)) playedGames
-      allValid = map (all and) checkedGames
-      numberOfValidGames = countValidGames allValid gamesIds
-      minCubesNeed = sum (map (product . calcMinCubesNeed availableCounts) playedGames)
+  scratchCards <- readFileAsLines  "./input/2023/day4.txt"
+  let myNumbers = map extractMyNumbers scratchCards
+      winningNumbers = map extractWinningNumbers scratchCards
 
   
 
-  print numberOfValidGames
-  print minCubesNeed
+  print scratchCards
+  print myNumbers
+  print winningNumbers
