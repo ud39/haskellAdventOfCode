@@ -2,6 +2,7 @@ module Main (main) where
 
 import MyLib
 import ReadInput
+import Data.List (intersect)
 
 {-
 import Test.Tasty
@@ -43,9 +44,15 @@ main = do
   scratchCards <- readFileAsLines  "./input/2023/day4.txt"
   let myNumbers = map extractMyNumbers scratchCards
       winningNumbers = map extractWinningNumbers scratchCards
+      howMuchIWon = [ intersect i j | (i, j) <- zip myNumbers winningNumbers ]
+      amountOfMatchingNumbers = map (length) howMuchIWon
+      valueOfWinning = sum [ 2^(n - 1) | n <- filter (/= 0) amountOfMatchingNumbers ]
 
   
 
   print scratchCards
   print myNumbers
   print winningNumbers
+  print howMuchIWon
+  print amountOfMatchingNumbers
+  print valueOfWinning
