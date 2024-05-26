@@ -1,4 +1,4 @@
-module Day2 (parseGame, getCount, getIndexes, compareCounts, countValidGames, calcMinCubesNeed) where
+module Day2 (parseGame, getCount, getIndexes, compareCounts, countValidGames, calcMinCubesNeed, getValidAmountOfGames) where
 
 import Data.List (dropWhileEnd, isInfixOf)
 import Data.List.Split (splitOn)
@@ -43,3 +43,15 @@ calcMinCubesNeed availableCounts games =
     map (\color -> maximum [getCount color game | game <- games]) colors
     where
         colors = map (dropWhile (== ' ') . dropWhile (/= ' ')) availableCounts
+
+getValidAmountOfGames :: [String] -> [String] -> Int
+getValidAmountOfGames games availableBalls = result
+  where
+    parsedGames = map parseGame games
+    playedGames = map tail parsedGames
+    gamesIds = getIndexes parsedGames
+
+    checkedGames = map (map (compareCounts availableBalls)) playedGames
+    allValid = map (all and) checkedGames
+    result = countValidGames allValid gamesIds
+

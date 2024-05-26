@@ -25,9 +25,10 @@ tests = testGroup "MyLib Tests" [faultyTest, correctTest]
 
 main :: IO ()
 main = do
+  games <- readFileAsLines  "./input/2023/day2.txt"
+  let 
+      availableCounts = ["12 red","13 green","14 blue"]
+      result = getValidAmountOfGames games availableCounts
 
-  scratchCards <- readFileAsLines  "./input/2023/day4.txt"
-  let sumOfCards = calculateSumOfCards scratchCards
-  
-  print scratchCards
-  print sumOfCards
+
+  print result
