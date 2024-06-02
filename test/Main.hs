@@ -25,10 +25,8 @@ tests = testGroup "MyLib Tests" [faultyTest, correctTest]
 
 main :: IO ()
 main = do
-  games <- readFileAsLines  "./input/2023/day2.txt"
+  scratchCards <- readFileAsLines  "./input/2023/day4.txt"
   let 
-      availableCounts = ["12 red","13 green","14 blue"]
-      result = getMinCubeNeeded games availableCounts
-
+      result = getTotalAmountOfPoints scratchCards
 
   print result

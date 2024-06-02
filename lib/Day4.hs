@@ -1,6 +1,7 @@
-module Day4 ( calculateSumOfCards )  where
+module Day4 ( calculateSumOfCards, getTotalAmountOfPoints )  where
 
 import Data.List ( intersect )
+import GHC.IO.Handle.FD (withBinaryFile)
 
 extractWinningNumbers :: String -> [Int]
 extractWinningNumbers scratchCard = 
@@ -62,3 +63,13 @@ calculateSumOfCards scratchCardsNumbers =
         -- Sum up the updated list
         sumOfCards = sum updatedList
     in sumOfCards
+
+getTotalAmountOfPoints :: [String] -> Int
+getTotalAmountOfPoints scratchCards = result
+    where
+        myNumbers = map extractMyNumbers scratchCards
+        winningNumbers = map extractWinningNumbers scratchCards
+        howMuchIWon = [  i `intersect` j | (i, j) <- zip myNumbers winningNumbers]
+        amountOfMatchingNumbers = map length howMuchIWon
+        result = sum [ 2^(n-1) | n <- filter (/= 0) amountOfMatchingNumbers]
+
