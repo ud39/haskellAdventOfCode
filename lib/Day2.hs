@@ -1,4 +1,4 @@
-module Day2 (parseGame, getCount, getIndexes, compareCounts, countValidGames, calcMinCubesNeed, getValidAmountOfGames) where
+module Day2 (getValidAmountOfGames, getMinCubeNeeded) where
 
 import Data.List (dropWhileEnd, isInfixOf)
 import Data.List.Split (splitOn)
@@ -55,3 +55,10 @@ getValidAmountOfGames games availableBalls = result
     allValid = map (all and) checkedGames
     result = countValidGames allValid gamesIds
 
+
+getMinCubeNeeded :: [String] -> [String] -> Int
+getMinCubeNeeded games availableCounts = result
+  where
+    parsedGames = map parseGame games
+    playedGames = map tail parsedGames
+    result = sum (map (product . calcMinCubesNeed availableCounts) playedGames)

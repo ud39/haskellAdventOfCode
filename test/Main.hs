@@ -28,7 +28,7 @@ main = do
   games <- readFileAsLines  "./input/2023/day2.txt"
   let 
       availableCounts = ["12 red","13 green","14 blue"]
-      result = getValidAmountOfGames games availableCounts
+      result = getMinCubeNeeded games availableCounts
 
 
   print result
