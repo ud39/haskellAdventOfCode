@@ -27,6 +27,8 @@ main :: IO ()
 main = do
   scratchCards <- readFileAsLines  "./input/2023/day4.txt"
   let 
-      result = getTotalAmountOfPoints scratchCards
+      result_part_1 = getTotalAmountOfPoints scratchCards
+      result_part_2 = calculateSumOfCards scratchCards
 
-  print result
+  print result_part_1
+  print result_part_2

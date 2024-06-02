@@ -9,14 +9,15 @@ module MyLib
     extractedStarsCoordinates,
     calcSumValidNumbers,
     calcGearRatioValue,
-    getTotalAmountOfPoints
+    getTotalAmountOfPoints,
+    calculateSumOfCards
   )
 where
 
-import Day1
+import Day1 ( calcCalibrationValue, extractNumbers )
 import Day2 (getValidAmountOfGames, getMinCubeNeeded)
 import Day3 (calcGearRatioValue, calcSumValidNumbers, extractNumberCoordinates, extractSymbolsCoordinates, extractedStarsCoordinates)
-import Day4
+import Day4 ( calculateSumOfCards, getTotalAmountOfPoints )
 
 someFunc :: String
 someFunc = "someFunc"
