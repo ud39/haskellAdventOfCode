@@ -1,3 +1,5 @@
+{-# OPTIONS_GHC -Wno-unrecognised-pragmas #-}
+{-# HLINT ignore "Use lambda-case" #-}
 module Main (main) where
 
 import MyLib
@@ -23,12 +25,44 @@ tests = testGroup "MyLib Tests" [faultyTest, correctTest]
 
 -}
 
+extractFarmingPlan :: String -> [String]
+extractFarmingPlan farmingplan = result
+  where
+    beginState = takeWhile (/= '-') farmingplan
+
+    extractEndState :: Eq a => a -> Int -> [a] -> [a]
+    extractEndState _ 0 xs = xs  -- Return the rest of the list when count reaches 0
+    extractEndState _ _ [] = []  -- Handle the case when the list is empty
+    extractEndState target count (x:xs)
+     | x == target = extractEndState target (count - 1) xs  -- Decrement count if target is found
+     | otherwise   = extractEndState target count xs  -- Continue processing the rest of the list
+
+
+    endState = takeWhile (/= ' ') (extractEndState '-' 2 (dropWhile (/= '-') farmingplan)) 
+    result = if endState == "" then [beginState] else [beginState, endState]
+
 main :: IO ()
 main = do
-  scratchCards <- readFileAsLines  "./input/2023/day4.txt"
+
+  input <- readFileAsLines  "./input/2023/day5.txt"
   let 
-      result_part_1 = getTotalAmountOfPoints scratchCards
-      result_part_2 = calculateSumOfCards scratchCards
+    cleanup = filter (/= "") input
+    seeds = head cleanup
+    plan = tail cleanup
+    steps = map extractFarmingPlan plan
+    beginToEnd = filter (\lst -> case lst of 
+                                  (_:x:_) -> not (null x)
+                                  _       -> False) steps
+  
+  -- print cleanup
+  print seeds
+  -- print plan
+  print steps
+  {-
+  let 
+      result_part_1 = getTotalAmountOfPoints input
+      result_part_2 = calculateSumOfCards input
 
   print result_part_1
   print result_part_2
+  -}
