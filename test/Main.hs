@@ -41,6 +41,15 @@ extractFarmingPlan farmingplan = result
     endState = takeWhile (/= ' ') (extractEndState '-' 2 (dropWhile (/= '-') farmingplan)) 
     result = if endState == "" then [beginState] else [beginState, endState]
 
+
+checkRange :: Int -> Int -> Int -> Int -> Int
+checkRange destinationBegin sourceBegin range currentValue = result
+  where
+    result = case currentValue of
+      _ | currentValue + range > currentValue && currentValue >= sourceBegin -> destinationBegin + (currentValue - sourceBegin)
+        | otherwise -> currentValue
+
+
 main :: IO ()
 main = do
 
@@ -50,14 +59,14 @@ main = do
     seeds = head cleanup
     plan = tail cleanup
     steps = map extractFarmingPlan plan
-    beginToEnd = filter (\lst -> case lst of 
-                                  (_:x:_) -> not (null x)
-                                  _       -> False) steps
+
+    test = checkRange 52 50 48 79
   
   -- print cleanup
-  print seeds
+  -- print seeds
   -- print plan
-  print steps
+  -- print steps
+  print test
   {-
   let 
       result_part_1 = getTotalAmountOfPoints input
