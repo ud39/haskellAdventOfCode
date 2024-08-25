@@ -4,6 +4,8 @@ module Main (main) where
 
 import MyLib
 import ReadInput
+import Data.Maybe (mapMaybe, isJust)
+import Text.Read (readMaybe)
 
 {-
 import Test.Tasty
@@ -49,6 +51,23 @@ checkRange destinationBegin sourceBegin range currentValue = result
       _ | currentValue + range > currentValue && currentValue >= sourceBegin -> destinationBegin + (currentValue - sourceBegin)
         | otherwise -> currentValue
 
+checkAllRanges :: [Int] -> Int -> Int
+checkAllRanges (destinationBegin : sourceBegin : range : _) currentValue = checkRange destinationBegin sourceBegin range currentValue
+checkAllRanges _ _ = error"Input is no compatible"
+
+parseStringToInt :: String -> [Int]
+parseStringToInt input = mapMaybe readMaybe (words input)
+
+isNumber :: String -> Bool
+isNumber str = all (isJust . (readMaybe :: String -> Maybe Int)) (words str)
+
+extractRange :: [[String]] -> [[Int]]
+extractRange = mapMaybe parseIfNumeric
+  where
+    parseIfNumeric :: [String] -> Maybe [Int]
+    parseIfNumeric [s] | isNumber s = Just (parseStringToInt s)
+                       | otherwise = Nothing
+    parseIfNumeric _ = Nothing
 
 main :: IO ()
 main = do
@@ -59,14 +78,15 @@ main = do
     seeds = head cleanup
     plan = tail cleanup
     steps = map extractFarmingPlan plan
+    parsedRange = extractRange steps
 
-    test = checkRange 52 50 48 79
+    -- test = checkAllRanges [52, 50, 48] 79
   
-  -- print cleanup
-  -- print seeds
-  -- print plan
-  -- print steps
-  print test
+  print parsedRange
+  print cleanup
+  print seeds
+  print plan
+  print steps
   {-
   let 
       result_part_1 = getTotalAmountOfPoints input
