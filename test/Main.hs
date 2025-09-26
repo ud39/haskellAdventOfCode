@@ -43,10 +43,12 @@ main = do
     plan = filter (any isAlphaNum) (tail input)
     mappings = getNextMapping plan
     range = map snd mappings
-    test = getNextStep [79, 14, 55, 13] range
+    test = getNextStep seeds range
+    solution = minimum test
 
   print seeds
   print plan
   print mappings
   print range
   print test
+  print solution
