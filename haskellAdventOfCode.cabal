@@ -62,13 +62,13 @@ library
     exposed-modules:  MyLib ReadInput
 
     -- Modules included in this library but not exported.
-    other-modules: Day1 Day2 Day3 Day4
+    other-modules: Day1 Day2 Day3 Day4 Day5
 
     -- LANGUAGE extensions used by modules in this package.
     -- other-extensions:
 
     -- Other library packages from which modules are imported.
-    build-depends:    base ^>=4.17.2.0
+    build-depends:    base >=4.17.2.0 && <4.19 
                     , containers
                     , split
 
@@ -79,14 +79,14 @@ library
     main-is: Main.hs
 
     -- Base language which the package is written in.
-    default-language: GHC2021
+    default-language: Haskell2010
 
 test-suite haskellAdventOfCode-test
     -- Import common warning flags.
     import:           warnings
 
     -- Base language which the package is written in.
-    default-language: GHC2021
+    default-language: Haskell2010
 
     -- Modules included in this executable, other than Main.
     -- other-modules:
@@ -103,9 +103,10 @@ test-suite haskellAdventOfCode-test
     -- The entrypoint to the test suite.
     main-is:          Main.hs
 
-    -- Test dependencies.
+
+    main-is:          Main.hs
     build-depends:
-        base ^>=4.17.2.0,
+        base >=4.17.2.0 && <4.19,
         tasty,
         tasty-hunit,
         directory,
